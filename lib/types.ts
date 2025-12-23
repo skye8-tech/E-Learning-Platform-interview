@@ -11,3 +11,10 @@ export interface course{
     },
     createdAt: string
 }
+
+export interface UserData{
+    email: string,
+    role: string,
+    id: string,
+    password?: string
+}
