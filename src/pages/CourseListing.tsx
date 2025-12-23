@@ -1,6 +1,9 @@
 import React, { useState }  from 'react'
 import {type  courseType } from '../assets/hooks/useCourses';
 import { Layout } from '../components/layout/Layout';
+import { useCourses } from '../assets/hooks/useCourses';
+import { Input } from '../components/ui/input';
+import { Search } from 'lucide-react';
 
 const CourseListing = () => {
 

@@ -55,10 +55,9 @@ export default defineConfig([
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
-      // Other configs...
-      // Enable lint rules for React
+   
       reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
+     
       reactDom.configs.recommended,
     ],
     languageOptions: {
@@ -71,3 +70,11 @@ export default defineConfig([
   },
 ])
 ```
+
+
+//Answered Questions
+Question 1
+- Use pagination to display the pages such that is loads from the API page by page
+- Apply Usememo hook to improve upon memeization since components will have to render over and over thus avoiding unnecesarry re-renders
+Question 2
+By adding identifiable slugs to the api responses fro easy SEO search and identification

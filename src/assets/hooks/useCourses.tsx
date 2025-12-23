@@ -1,4 +1,4 @@
-import { useContext, createContext type ReactNode } from "react"
+import { useContext, createContext, type ReactNode } from "react"
 import { useState, useEffect } from "react"
 import axios from "axios"
 
@@ -15,6 +15,10 @@ export interface courseType{
     id: string;
     title: string;
     shortDescription: string;
+    fullDescription: string;
+    level: "beginner" | "intermediate" | "advanced";
+    rating: number;
+    enrolledCount: number;
     instructor: string;
 }
 

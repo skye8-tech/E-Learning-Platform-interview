@@ -1,10 +1,13 @@
-export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {}
+import { cn } from "@/lib/utils"
 
-export function Skeleton({ className = "", ...props }: SkeletonProps) {
+function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      className={`animate-pulse rounded-md bg-muted ${className}`}
+      data-slot="skeleton"
+      className={cn("bg-accent animate-pulse rounded-md", className)}
       {...props}
     />
-  );
+  )
 }
+
+export { Skeleton }

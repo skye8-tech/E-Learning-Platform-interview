@@ -3,11 +3,11 @@ import { useParams, Link } from "react-router-dom";
 import { Star, Clock, Users, Award, ArrowLeft, BookOpen, CheckCircle } from "lucide-react";
 import { Layout } from "../components/layout/Layout";
 import { Button } from "../components/ui/button";
-import { Badge } from "../components/ui/badge";
-import { Skeleton } from "../components/ui/skeleton";
-import EnrollButton from "../components/EnrollButton";
-import { type courseType } from "../assets/hooks/useCourses";
+import type { courseType } from "../assets/hooks/useCourses";
 import { Input } from "../components/ui/input";
+import { Skeleton } from "../components/ui/skeleton";
+import { Badge } from "../components/ui/badge";
+import { useCourses } from "../assets/hooks/useCourses";
 
 
 
@@ -19,10 +19,11 @@ const levelColors: Record<string, string> = {
 
 const CourseDetails = () => {
   const { id } = useParams<{ id: string }>();
-  const [course, setCourse] = useState<Course | null>(null);
+  const [course, setCourse] = useState<courseType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { getCourseDetails } = useCourses();
 
   
 
