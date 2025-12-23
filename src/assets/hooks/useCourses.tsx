@@ -20,6 +20,7 @@ export interface courseType{
     rating: number;
     enrolledCount: number;
     instructor: string;
+    thumbnail: string;
 }
 
 interface courseContextProviderProps {
@@ -36,6 +37,8 @@ export const courseContextProvider = ({ children }: courseContextProviderProps) 
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
 
+    import.meta.env.VITE_API_URL
+
     useEffect(() => {
         // Fetch courses here
         getCourses()
@@ -44,7 +47,7 @@ export const courseContextProvider = ({ children }: courseContextProviderProps) 
 
     const getCourses = async () => {
         try {
-             const response = await axios.get(`https://elearning.skye8.tech/api/courses/`)
+             const response = await axios.get(`${import.meta.env.VITE_API_URL}/courses/`)
              setCourses(response.data)
              console.log(response.data)
         } catch (error) {
@@ -55,7 +58,7 @@ export const courseContextProvider = ({ children }: courseContextProviderProps) 
 
     const getCourseDetails = async (courseId: string) => {
         try {
-            const response = await axios.get(`https://elearning.skye8.tech/api/courses/${courseId}/`)
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/courses/${courseId}/`)
             return response.data
         } catch (error) {
             setError("Failed to fetch course details")

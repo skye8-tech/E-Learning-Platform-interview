@@ -77,4 +77,6 @@ Question 1
 - Use pagination to display the pages such that is loads from the API page by page
 - Apply Usememo hook to improve upon memeization since components will have to render over and over thus avoiding unnecesarry re-renders
 Question 2
-By adding identifiable slugs to the api responses fro easy SEO search and identification
+- By adding identifiable slugs to the api responses fro easy SEO search and identification
+Question 3
+- Migrate to Next.js for better state management and server side rendering

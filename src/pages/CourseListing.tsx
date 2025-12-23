@@ -1,20 +1,39 @@
-import React, { useState }  from 'react'
+import React, { useEffect, useState }  from 'react'
 import {type  courseType } from '../assets/hooks/useCourses';
 import { Layout } from '../components/layout/Layout';
 import { useCourses } from '../assets/hooks/useCourses';
 import { Input } from '../components/ui/input';
 import { Search } from 'lucide-react';
+import CourseCard from '../components/courses/CourseCard';
+import EmptyState from '../components/courses/EmptyState';
 
 const CourseListing = () => {
 
- const [courses, setCourses] = useState<courseType[]>([]);
+
   const [filteredCourses, setFilteredCourses] = useState<courseType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-    
+  const { courses, loading, error, getCourses } = useCourses();
 
+  useEffect(() => {
+    if (courses.length > 0) {
+      setFilteredCourses(courses);
+      setIsLoading(false);
+    }
+  }, [courses]);
 
- 
+  useEffect(() => {
+    if (searchQuery.trim() === '') {
+      setFilteredCourses(courses);
+    } else {
+      const filtered = courses.filter(course =>
+        course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        course.shortDescription.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        course.instructor.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredCourses(filtered);
+    }
+  }, [searchQuery, courses]);
 
   return (
     <Layout>
@@ -75,6 +94,6 @@ const CourseListing = () => {
         )}
       </section>
     </Layout>
-
+}
 
 export default CourseListing
