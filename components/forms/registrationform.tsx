@@ -1,21 +1,31 @@
+"use client"
 import { useState, useCallback } from "react";
+import { useUserStore } from "@/lib/store";
+import { LoadingButton } from "../animatex/loadingbutton";
+import { UserData } from "@/lib/types";
+import { redirect } from "next/navigation";
 
 type FormState = {
 	username: string;
 	email: string;
 	className: string;
+    password: string;
 };
 
 const CLASS_OPTIONS = ["Class 1", "Class 2", "Class 3"];
 
 export default function RegistrationForm() {
-	const [form, setForm] = useState<FormState>({
+	const [form, setForm] = useState<UserData>({
 		username: "",
 		email: "",
+        password: "",
+        id: "",
 		className: CLASS_OPTIONS[0],
 	});
-	const [errors, setErrors] = useState<Partial<FormState>>({});
+	const [errors, setErrors] = useState("");
 	const [success, setSuccess] = useState<string>("");
+    const { addUser, users } = useUserStore();
+    const [isloading, setIsLoading] = useState(false);
 
 	const handleChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -25,60 +35,54 @@ export default function RegistrationForm() {
 		[]
 	);
 
-	const validate = useCallback(() => {
-		const nextErrors: Partial<FormState> = {};
-		if (!form.username.trim()) nextErrors.username = "Username is required";
-		if (!form.email.trim()) nextErrors.email = "Email is required";
-		else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) nextErrors.email = "Invalid email";
-		if (!form.className) nextErrors.className = "Please select a class";
-		setErrors(nextErrors);
-		return Object.keys(nextErrors).length === 0;
-	}, [form]);
-
-	const handleSubmit = useCallback(
-		(e: React.FormEvent) => {
-			e.preventDefault();
-			setSuccess("");
-			if (!validate()) return;
-			// Replace this with an API call as needed
-			console.log("Registration submitted:", form);
-			setSuccess("Registration successful");
-			setForm({ username: "", email: "", className: CLASS_OPTIONS[0] });
-		},
-		[form, validate]
-	);
+    const handlesubmit = () => {
+        setIsLoading(true);
+        try{
+            addUser({ ...form, id: (users.length + 1).toString() });
+            setSuccess("Registration successful");
+			setForm({ username: "", email: "", className: CLASS_OPTIONS[0], password: "" });
+            redirect('/courses');
+        }catch(err){
+            setErrors("Registration failed. Please try again." );
+        }
+    }
+	
 
 	return (
-		<form onSubmit={handleSubmit} style={{ maxWidth: 420 }}>
-			<div style={{ marginBottom: 12 }}>
+		<form onSubmit={handlesubmit} className="bg-white p-4 rounded-2xl shadow-xs w-full max-w-[480px]">
+			{errors && <div style={{ color: "#c00", marginTop: 6 }}>{errors}</div>}
+            <div style={{ marginBottom: 12 }}>
 				<label style={{ display: "block", fontWeight: 600 }}>Username</label>
 				<input
 					name="username"
+                    className="input-field"
 					value={form.username}
 					onChange={handleChange}
 					placeholder="Enter username"
 					style={{ width: "100%", padding: 8, borderRadius: 4 }}
 				/>
-				{errors.username && <div style={{ color: "#c00", marginTop: 6 }}>{errors.username}</div>}
+				
 			</div>
 
 			<div style={{ marginBottom: 12 }}>
 				<label style={{ display: "block", fontWeight: 600 }}>Email</label>
 				<input
 					name="email"
+                    className="input-field"
 					value={form.email}
 					onChange={handleChange}
 					placeholder="you@example.com"
 					type="email"
 					style={{ width: "100%", padding: 8, borderRadius: 4 }}
 				/>
-				{errors.email && <div style={{ color: "#c00", marginTop: 6 }}>{errors.email}</div>}
+				
 			</div>
 
 			<div style={{ marginBottom: 12 }}>
 				<label style={{ display: "block", fontWeight: 600 }}>Class</label>
 				<select
 					name="className"
+                    className="input-field"
 					value={form.className}
 					onChange={handleChange}
 					style={{ width: "100%", padding: 8, borderRadius: 4 }}
@@ -89,12 +93,11 @@ export default function RegistrationForm() {
 						</option>
 					))}
 				</select>
-				{errors.className && <div style={{ color: "#c00", marginTop: 6 }}>{errors.className}</div>}
+				
 			</div>
 
-			<button type="submit" style={{ padding: "8px 12px", borderRadius: 6 }}>
-				Register
-			</button>
+			<LoadingButton text="Register" loading={false} className="button-primary"/>
+             
 
 			{success && <div style={{ color: "green", marginTop: 12 }}>{success}</div>}
 		</form>

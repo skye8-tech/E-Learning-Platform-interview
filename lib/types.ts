@@ -14,7 +14,8 @@ export interface course{
 
 export interface UserData{
     email: string,
-    role: string,
-    id: string,
     password?: string
+    username: string,
+    className: string,
+    id?: string
 }
